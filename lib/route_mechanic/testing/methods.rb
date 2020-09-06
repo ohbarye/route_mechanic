@@ -1,3 +1,5 @@
+require "route_mechanic/testing/route_wrapper"
+require "route_mechanic/testing/error_inspector"
 require "action_controller"
 require "action_controller/test_case"
 
@@ -45,7 +47,7 @@ module RouteMechanic
             end
 
             if journey_route
-              wrapper = ActionDispatch::Routing::RouteWrapper.new journey_route
+              wrapper = RouteWrapper.new journey_route
               assert_routes(wrapper.controller, wrapper.action, wrapper.verb, wrapper.required_parts)
               controller_routes << wrapper
             else
@@ -68,7 +70,7 @@ module RouteMechanic
       end
 
       def definition(journey_route)
-        wrapper = ActionDispatch::Routing::RouteWrapper.new journey_route
+        wrapper = RouteWrapper.new journey_route
         assert_routes(wrapper.controller, wrapper.action, wrapper.verb, wrapper.required_parts)
         {
           controller: wrapper.controller,
@@ -87,7 +89,7 @@ module RouteMechanic
 
       def collect_config_routes_errors(routes, controller_routes)
         routes.reduce([]) do |memo, journey_route|
-          wrapper = ActionDispatch::Routing::RouteWrapper.new journey_route
+          wrapper = RouteWrapper.new journey_route
           assert_routes(wrapper.controller, wrapper.action, wrapper.verb, wrapper.required_parts)
 
           matched_controller_exist = controller_routes.any? do |w|
@@ -112,46 +114,17 @@ module RouteMechanic
         application_routes.routes.reject do |journey_route|
           # Skip internals, endpoints that Rails adds by default
           # Also Engines should be skipped since Engine's tests should be done in Engine
-          wrapper = ActionDispatch::Routing::RouteWrapper.new(journey_route)
+          wrapper = RouteMechanic::Testing::RouteWrapper.new(journey_route)
           wrapper.internal? || wrapper.required_defaults.empty? || wrapper.path.start_with?('/rails/')
         end
       end
 
       def check_aggregated_result(controller_routes_errors, config_routes_errors)
         if [*controller_routes_errors, *config_routes_errors].present?
-          assert false, error_message(controller_routes_errors, config_routes_errors)
+          assert false, ErrorInspector.new(controller_routes_errors, config_routes_errors).message
         else
           assert true
         end
-      end
-
-      def error_message(controller_routes_errors, config_routes_errors)
-        buffer = []
-
-        if controller_routes_errors.present?
-          buffer << "  No route matches to the controllers and action methods below"
-          buffer << controller_routes_errors.map {|r|
-            "    #{r[:controller]}##{r[:action]}"
-          }
-        end
-
-        if config_routes_errors.present?
-          verb_width, path_width = widths(config_routes_errors)
-          buffer << "  No controller and action matches to the routes below"
-          buffer << config_routes_errors.map { |w|
-            "    #{w.verb.ljust(verb_width)} #{w.path.ljust(path_width)} #{w.reqs}"
-          }
-          buffer << "\n"
-        end
-
-        ["[Route Mechanic]", buffer].join("\n")
-      end
-
-      def widths(routes)
-        [
-          routes.map { |w| w.verb.length }.max || 0,
-          routes.map { |w| w.path.length }.max || 0
-        ]
       end
     end
   end
