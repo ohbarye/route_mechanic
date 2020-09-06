@@ -2,6 +2,7 @@ require "delegate"
 
 module RouteMechanic
   module Testing
+    # This class just wraps ActionDispatch::Journey::Route
     class RouteWrapper < SimpleDelegator
       def endpoint
         app.dispatcher? ? "#{controller}##{action}" : app.rack_app.inspect
