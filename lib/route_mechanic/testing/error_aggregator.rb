@@ -1,3 +1,5 @@
+require "route_mechanic/testing/error_inspector"
+
 module RouteMechanic
   module Testing
     class ErrorAggregator
@@ -26,6 +28,10 @@ module RouteMechanic
 
       def no_error?
         [@config_routes_errors, @controller_routes_errors].all?(&:empty?)
+      end
+
+      def error_message
+        ErrorInspector.new(self).message
       end
 
       private

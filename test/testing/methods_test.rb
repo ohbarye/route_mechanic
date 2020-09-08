@@ -4,10 +4,6 @@ require 'fake_app/rails_app'
 class RouteMechanicTestingMethodsTest < Minitest::Test
   include RouteMechanic::Testing::Methods
 
-  def user_routes
-    FakeApp.routes
-  end
-
   def test_that_fake_app_has_correct_routes
     with_routing do |set|
       set.draw do
