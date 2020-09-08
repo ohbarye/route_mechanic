@@ -1,3 +1,4 @@
+$LOAD_PATH.unshift File.expand_path("../fixtures", __dir__)
 require "bundler/setup"
 require "route_mechanic"
 

@@ -7,5 +7,5 @@
 /pkg/
 /spec/reports/
 /tmp/
-/test/fake_app/log/
-/test/fake_app/tmp/
+/fixtures/fake_app/log/
+/fixtures/fake_app/tmp/

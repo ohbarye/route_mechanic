@@ -1,5 +1,5 @@
 example_id                          | status | run_time        |
 ----------------------------------- | ------ | --------------- |
-./spec/route_mechanic_spec.rb[1:1]  | passed | 0.00079 seconds |
-./spec/testing/methods_spec.rb[1:1] | passed | 0.05987 seconds |
-./spec/testing/methods_spec.rb[1:2] | passed | 0.00692 seconds |
+./spec/route_mechanic_spec.rb[1:1]  | passed | 0.00089 seconds |
+./spec/testing/methods_spec.rb[1:1] | passed | 0.06586 seconds |
+./spec/testing/methods_spec.rb[1:2] | passed | 0.00743 seconds |
