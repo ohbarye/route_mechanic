@@ -1,38 +1,94 @@
 # RouteMechanic
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/route_mechanic`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+No need to maintain Rails' routing tests manually. RouteMechanic automatically detects broken routes and missing action methods in controller once you've finished installation.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'route_mechanic'
+group :test do
+  gem 'route_mechanic'
+end
 ```
 
 And then execute:
 
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install route_mechanic
+```shell
+$ bundle install
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+RouteMechanic is available for both RSpec and MiniTest.
 
-## Development
+All you have to do is to add just one test case that keeps your application's routes not broken.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+### RSpec
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Just add a test file which has only one test case using `have_valid_routes` matcher.
 
-## Contributing
+```ruby
+RSpec.describe 'Rails.application', type: :routing do
+  it "fails if application does not have valid routes" do
+   expect(Rails.application.routes).to have_valid_routes
+  end
+end
+```
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/route_mechanic. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/route_mechanic/blob/master/CODE_OF_CONDUCT.md).
+### MiniTest
+
+Just add a test file like below.
+
+```ruby
+class RoutingTest < Minitest::Test
+  include ::RouteMechanic::Testing::Methods
+
+  def test_that_fake_app_has_correct_routes
+    assert_all_routes
+  end
+end
+```
+
+### What if RouteMechanic detects broken routes?
+
+It tells you broken routes as follows.
+
+```ruby
+  0) RouteMechanic::RSpec::Matchers fails if application does not have valid routes
+     Failure/Error: expect(Rails.application.routes).to have_valid_routes
+
+       [Route Mechanic]
+         No route matches to the controllers and action methods below
+           UsersController#unknown
+         No controller and action matches to the routes below
+           GET    /users/:user_id/friends(.:format) users#friends
+           GET    /users(.:format)                  users#index
+           DELETE /users/:id(.:format)              users#destroy
+     # ./spec/rspec/matchers_spec.rb:8:in `block (2 levels) in <top (required)>'
+
+1 examples, 1 failure, 0 passed
+```
+
+RouteMechanic reports 2 types of broken routes.
+
+1. Missing routes
+    - Your application has the controller and the action method but `config/routes.rb` doesn't have corresponds settings.
+2. Missing action methods
+    - Your application's `config/routes.rb` has routing declaration but no controller has a correspond action method.
+
+## Motivation
+
+I believe most Rails developers write request specs instead of routing specs, and you might wonder what's worth to automate routing spec. Having said that, I can come up with some use-cases of this gem.
+
+1. When your project is kinda aged and none knows which route is alive and which one is dead.
+    - => You can detect dead code by using this gem.
+2. When your application doesn't have enough request specs (even controller specs).
+    - => This gem could be a good start point to increase tests to ensure routing is valid.
+3. When you try to make big refactor of `config/routes.rb`.
+    - => It's burden to run all request specs during refactoring. This could save your time.
+4. When you're compelled to write routing specs by any pressure. ;-)
+    - => Set you free from tedious work!
 
 
 ## License
