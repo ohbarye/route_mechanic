@@ -11,7 +11,7 @@ class RouteMechanicTestingMethodsTest < Minitest::Test
           get :unknown
         end
       end
-      assert_route_conforms
+      assert_all_routes
     end
   end
 
@@ -21,7 +21,7 @@ class RouteMechanicTestingMethodsTest < Minitest::Test
         set.draw do
           resources :users
         end
-        assert_route_conforms
+        assert_all_routes
       end
     end
 
@@ -43,7 +43,7 @@ class RouteMechanicTestingMethodsTest < Minitest::Test
 
   def test_that_fake_app_has_missing_routes
     e = assert_raises(Minitest::Assertion) do
-      assert_route_conforms
+      assert_all_routes
     end
 
     expected_message = <<~MSG

@@ -9,3 +9,4 @@
 /tmp/
 /fixtures/fake_app/log/
 /fixtures/fake_app/tmp/
+/.rspec_status

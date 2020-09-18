@@ -10,8 +10,13 @@ module RouteMechanic
       include MinitestAssertionAdapter if defined?(RSpec)
       include ActionDispatch::Assertions
 
+      # @param [ActionDispatch::Routing::RouteSet] routes
       # @raise [Minitest::Assertion]
-      def assert_route_conforms
+      def assert_all_routes(routes=Rails.application.routes)
+        # assert_routing expect @routes to exists as like this class inherits ActionController::TestCase.
+        # If user already defines @routes, do not override
+        @routes ||= routes
+
         # Instead of including ActionController::TestCase::Behavior, set up
         # https://github.com/rails/rails/blob/5b6aa8c20a3abfd6274c83f196abf73cacb3400b/actionpack/lib/action_controller/test_case.rb#L519-L520
         @controller = nil unless defined? @controller
@@ -24,13 +29,6 @@ module RouteMechanic
 
       private
 
-      # @return [ActionDispatch::Routing::RouteSet]
-      def application_routes
-        # assert_routing expect @routes to exists like this class inherits ActionController::TestCase.
-        # If users want to give routes, define `user_routes` method instead of referring Rails.application.routes directly here.
-        @routes ||= Rails.application.routes
-      end
-
       # @param [RouteMechanic::Testing::RouteWrapper] wrapper
       # @raise [Minitest::Assertion]
       def assert_routes(wrapper)
@@ -39,7 +37,7 @@ module RouteMechanic
         end
 
         base_option = { controller: wrapper.controller, action: wrapper.action }
-        url = application_routes.url_helpers.url_for(
+        url = @routes.url_helpers.url_for(
           base_option.merge({ only_path: true }).merge(required_parts))
         expected_options = base_option.merge(required_parts)
 
@@ -65,7 +63,7 @@ module RouteMechanic
 
       # @return [Array<ActionDispatch::Journey::Route>]
       def target_routes
-        application_routes.routes.reject do |journey_route|
+        @routes.routes.reject do |journey_route|
           # Skip internals, endpoints that Rails adds by default
           # Also Engines should be skipped since Engine's tests should be done in Engine
           wrapper = RouteWrapper.new(journey_route)

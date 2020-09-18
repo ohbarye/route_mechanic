@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["ohbarye"]
   spec.email         = ["over.rye@gmail.com"]
 
-  spec.summary       = %q{Route Mechanic detects broken routes with ease}
-  spec.description   = %q{Route Mechanic detects broken routes with ease}
+  spec.summary       = %q{RouteMechanic detects broken routes with ease}
+  spec.description   = %q{No need to maintain Rails' routing tests manually. RouteMechanic automatically detects broken routes and missing action methods in controller once you've finished installation.}
   spec.homepage      = "https://github.com/ohbarye/route_machanic"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
