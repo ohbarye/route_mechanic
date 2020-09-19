@@ -1,6 +1,6 @@
 # RouteMechanic
 [![Gem Version](https://badge.fury.io/rb/route_mechanic.svg)](https://badge.fury.io/rb/route_mechanic)
-[![Build Status](https://github.com/ohbarye/route_mechanic/workflows/test/badge.svg?branch=master)](https://github.com/ohbarye/route_machanic/actions?query=workflow%3Atest)
+[![Build Status](https://github.com/ohbarye/route_mechanic/workflows/test/badge.svg?branch=master)](https://github.com/ohbarye/route_mechanic/actions?query=workflow%3Atest)
 
 No need to maintain Rails' routing tests manually. RouteMechanic automatically detects broken routes and missing action methods in controller once you've finished installation.
 
