@@ -46,7 +46,7 @@ Just add a test file like below.
 class RoutingTest < Minitest::Test
   include ::RouteMechanic::Testing::Methods
 
-  def test_that_fake_app_has_correct_routes
+  def test_that_application_has_correct_routes
     assert_all_routes
   end
 end
@@ -57,7 +57,7 @@ end
 It tells you broken routes as follows.
 
 ```ruby
-  0) RouteMechanic::RSpec::Matchers fails if application does not have valid routes
+  0) Rail.application fails if application does not have valid routes
      Failure/Error: expect(Rails.application.routes).to have_valid_routes
 
        [Route Mechanic]
