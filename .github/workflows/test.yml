@@ -38,10 +38,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Cache gemfiles/vendor/bundle
+      - name: Cache vendor/bundle
         uses: actions/cache@v2
         with:
-          path: gemfiles/vendor/bundle
+          path: vendor/bundle
           key: v1-gem-${{ runner.os }}-${{ matrix.ruby }}-${{ github.sha }}
           restore-keys: |
             v1-gem-${{ runner.os }}-${{ matrix.ruby }}-
