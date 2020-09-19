@@ -33,7 +33,7 @@ Just add a test file which has only one test case using `have_valid_routes` matc
 ```ruby
 RSpec.describe 'Rails.application', type: :routing do
   it "fails if application does not have valid routes" do
-   expect(Rails.application.routes).to have_valid_routes
+   expect(Rails.application).to have_valid_routes
   end
 end
 ```

@@ -5,7 +5,7 @@ RSpec.describe RouteMechanic::RSpec::Matchers, type: :routing do
 
   it "fails if application does not have valid routes" do
     expect {
-      expect(Rails.application.routes).to have_valid_routes
+      expect(Rails.application).to have_valid_routes
     }.to raise_error(<<~MSG)
         [Route Mechanic]
           No route matches to the controllers and action methods below

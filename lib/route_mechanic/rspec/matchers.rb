@@ -8,7 +8,7 @@ module RouteMechanic
         include ::RSpec::Matchers::Composable
         include RouteMechanic::Testing::Methods
 
-        # @param [ActionDispatch::Routing::RouteSet] expected
+        # @param [Rails::Application] expected
         def initialize(expected)
           @expected = expected
         end
@@ -42,8 +42,8 @@ module RouteMechanic
         end
       end
 
-      def have_valid_routes(routes=Rails.application.routes)
-        HaveValidRoutes.new(routes)
+      def have_valid_routes(application=Rails.application)
+        HaveValidRoutes.new(application)
       end
     end
   end

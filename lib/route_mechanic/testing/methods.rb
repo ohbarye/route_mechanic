@@ -10,12 +10,10 @@ module RouteMechanic
       include MinitestAssertionAdapter if defined?(RSpec)
       include ActionDispatch::Assertions
 
-      # @param [ActionDispatch::Routing::RouteSet] routes
+      # @param [Rails::Application] application
       # @raise [Minitest::Assertion]
-      def assert_all_routes(routes=Rails.application.routes)
-        # assert_routing expect @routes to exists as like this class inherits ActionController::TestCase.
-        # If user already defines @routes, do not override
-        @routes ||= routes
+      def assert_all_routes(application=Rails.application)
+        @application = application
 
         # Instead of including ActionController::TestCase::Behavior, set up
         # https://github.com/rails/rails/blob/5b6aa8c20a3abfd6274c83f196abf73cacb3400b/actionpack/lib/action_controller/test_case.rb#L519-L520
@@ -29,6 +27,20 @@ module RouteMechanic
 
       private
 
+      def routes
+        # assert_routing expect @routes to exists as like this class inherits ActionController::TestCase.
+        # If user already defines @routes, do not override
+        @routes ||= @application.routes
+
+        return @routes if @routes.routes.size > 0
+
+        # If routes setting is not loaded when running test, it automatically loads config/routes as Rails does.
+        load_path = "#{Rails.root.join('config/routes.rb')}"
+        @application.routes_reloader.paths << load_path unless @application.routes_reloader.paths.include? load_path
+        @application.reload_routes!
+        @routes
+      end
+
       # @param [RouteMechanic::Testing::RouteWrapper] wrapper
       # @raise [Minitest::Assertion]
       def assert_routes(wrapper)
@@ -37,7 +49,7 @@ module RouteMechanic
         end
 
         base_option = { controller: wrapper.controller, action: wrapper.action }
-        url = @routes.url_helpers.url_for(
+        url = routes.url_helpers.url_for(
           base_option.merge({ only_path: true }).merge(required_parts))
         expected_options = base_option.merge(required_parts)
 
@@ -62,7 +74,7 @@ module RouteMechanic
 
       # @return [Array<ActionDispatch::Journey::Route>]
       def target_routes
-        @routes.routes.reject do |journey_route|
+        routes.routes.reject do |journey_route|
           # Skip internals, endpoints that Rails adds by default
           # Also Engines should be skipped since Engine's tests should be done in Engine
           wrapper = RouteWrapper.new(journey_route)
