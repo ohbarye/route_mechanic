@@ -1,0 +1,59 @@
+name: test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  schedule:
+    - cron: "0 10 * * 5" # JST 19:00 (Fri)
+
+env:
+  CI: "true"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: ${{ matrix.ruby }}
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby:
+          - ruby:2.3
+          - ruby:2.4
+          - ruby:2.5
+          - ruby:2.6
+          - ruby:2.7
+          - rubylang/ruby:master-nightly-bionic
+        test_framework:
+          - rspec
+          - rake
+        include:
+          - ruby: rubylang/ruby:master-nightly-bionic
+            allow_failures: "true"
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache gemfiles/vendor/bundle
+        uses: actions/cache@v2
+        with:
+          path: gemfiles/vendor/bundle
+          key: v1-gem-${{ runner.os }}-${{ matrix.ruby }}-${{ github.sha }}
+          restore-keys: |
+            v1-gem-${{ runner.os }}-${{ matrix.ruby }}-
+        continue-on-error: ${{ matrix.allow_failures == 'true' }}
+      - name: bundle update
+        run: |
+          set -xe
+          bundle config path vendor/bundle
+          bundle update --jobs $(nproc) --retry 3
+        continue-on-error: ${{ matrix.allow_failures == 'true' }}
+      - name: Run RSpec
+        run: |
+          set -xe
+          bundle exec ${{ matrix.test_framework }}
+        continue-on-error: ${{ matrix.allow_failures == 'true' }}
