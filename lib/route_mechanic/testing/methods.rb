@@ -55,9 +55,8 @@ module RouteMechanic
       # If complicated controllers path is used, use Rails.application.eager_load! instead.
       def eager_load_controllers
         load_path = "#{Rails.root.join('app/controllers')}"
-        relname_range = (load_path.to_s.length + 1)...-3
         Dir.glob("#{load_path}/**/*.rb").sort.each do |file|
-          require_dependency file[relname_range]
+          require_dependency file
         end
       end
 
