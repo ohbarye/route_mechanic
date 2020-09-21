@@ -3,6 +3,7 @@ require "route_mechanic/testing/error_aggregator"
 require "route_mechanic/testing/minitest_assertion_adopter"
 require "action_controller"
 require "action_controller/test_case"
+require "regexp-examples"
 
 module RouteMechanic
   module Testing
@@ -45,7 +46,12 @@ module RouteMechanic
       # @raise [Minitest::Assertion]
       def assert_routes(wrapper)
         required_parts = wrapper.required_parts.reduce({}) do |memo, required_part|
-          memo.merge({ required_part => '1' }) # '1' is pseudo id
+          dummy = if wrapper.requirements[required_part].is_a?(Regexp)
+                    wrapper.requirements[required_part].examples.last
+                  else
+                    '1'
+                  end
+          memo.merge({ required_part => dummy }) # Set pseudo params to meets requirements
         end
 
         base_option = { controller: wrapper.controller, action: wrapper.action }
