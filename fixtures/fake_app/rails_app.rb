@@ -14,6 +14,13 @@ FakeApp.routes.draw do
     get '/constraints_test' => 'users#index'
   end
 
+  scope ':locale', locale: /en|ja/ do
+    get '/locale_test', to: 'photos#index'
+    get '/photos/:id', to: 'photos#show', constraints: { id: /[A-Z]\d{5}/ }
+  end
+
+  get 'organizations/:id', to: 'organizations#show', id: /[A-Z]\d{5}/
+
   resources :users do
     get 'friends', to: :friends
     mount FakeEngine::Engine, at: "/fake_engine", fake_default_param: 'FAKE'
