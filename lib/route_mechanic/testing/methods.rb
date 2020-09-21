@@ -78,7 +78,7 @@ module RouteMechanic
           # Skip internals, endpoints that Rails adds by default
           # Also Engines should be skipped since Engine's tests should be done in Engine
           wrapper = RouteWrapper.new(journey_route)
-          wrapper.internal? || wrapper.required_defaults.empty? || wrapper.path.start_with?('/rails/')
+          wrapper.internal? || !wrapper.defaults[:controller] || !wrapper.defaults[:action] || wrapper.path.start_with?('/rails/')
         end
       end
     end
