@@ -10,6 +10,10 @@ FakeApp.config.root = File.dirname(__FILE__)
 FakeApp.initialize!
 
 FakeApp.routes.draw do
+  constraints subdomain: /\A[0-9a-z-]+\z/ do
+    get '/constraints_test' => 'users#index'
+  end
+
   resources :users do
     get 'friends', to: :friends
     mount FakeEngine::Engine, at: "/fake_engine", fake_default_param: 'FAKE'
