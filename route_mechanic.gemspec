@@ -25,5 +25,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "actionpack", ">= 4.2", "< 6.1"
-  spec.add_runtime_dependency "regexp-examples"
+  spec.add_runtime_dependency "regexp-examples", ">= 1.5", "< 2"
 end
