@@ -12,6 +12,7 @@ RSpec.describe RouteMechanic::Testing::Methods do
           No route matches to the controllers and action methods below
             UsersController#unknown
           No controller and action matches to the routes below
+            GET    /constraints_test(.:format)       users#index
             GET    /users/:user_id/friends(.:format) users#friends
             GET    /users(.:format)                  users#index
             GET    /users/new(.:format)              users#new
