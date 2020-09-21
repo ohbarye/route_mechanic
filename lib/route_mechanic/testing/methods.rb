@@ -53,7 +53,12 @@ module RouteMechanic
           base_option.merge({ only_path: true }).merge(required_parts))
         expected_options = base_option.merge(required_parts)
 
-        assert_routing({ path: url, method: wrapper.verb }, expected_options)
+        assert_generates(url, expected_options)
+        # Q. Why not using `assert_routing` or `assert_recognize`?
+        # A. They strictly checks `constraints` in routes.rb and
+        #    this gem can't generate a request that meets whole constraints just in time.
+        # https://github.com/ohbarye/route_mechanic/issues/7#issuecomment-695957142
+        # https://guides.rubyonrails.org/routing.html#specifying-constraints
       end
 
       # @return [Array<Controller>]
