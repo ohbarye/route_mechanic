@@ -52,6 +52,9 @@ class RouteMechanicTestingMethodsTest < Minitest::Test
           UsersController#unknown
         No controller and action matches to the routes below
           GET    /constraints_test(.:format)       users#index
+          GET    /:locale/locale_test(.:format)    photos#index {:locale=>/en|ja/}
+          GET    /:locale/photos/:id(.:format)     photos#show {:locale=>/en|ja/, :id=>/[A-Z]\\d{5}/}
+          GET    /organizations/:id(.:format)      organizations#show {:id=>/[A-Z]\\d{5}/}
           GET    /users/:user_id/friends(.:format) users#friends
           GET    /users(.:format)                  users#index
           GET    /users/new(.:format)              users#new
