@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{No need to maintain Rails' routing tests manually. RouteMechanic automatically detects broken routes and missing action methods in controller once you've finished installation.}
   spec.homepage      = "https://github.com/ohbarye/route_mechanic"
   spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/ohbarye/route_mechanic"
