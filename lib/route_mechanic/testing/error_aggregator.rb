@@ -40,15 +40,15 @@ module RouteMechanic
         @controllers.each do |controller|
           controller_path = controller.controller_path
           controller.action_methods.each do |action_method|
-            journey_route = @routes.detect do |route|
+            journey_routes = @routes.select do |route|
               route.defaults[:controller].to_sym == controller_path.to_sym && route.defaults[:action].to_sym == action_method.to_sym
             end
 
-            if journey_route
-              wrapper = RouteWrapper.new journey_route
-              @controller_routes << wrapper
-            else
+            if journey_routes.empty?
               @controller_routes_errors << { controller: controller, action: action_method }
+            else
+              wrappers = journey_routes.map { |r| RouteWrapper.new(r) }
+              @controller_routes.concat(wrappers)
             end
           end
         end

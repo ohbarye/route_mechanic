@@ -24,5 +24,6 @@ FakeApp.routes.draw do
   resources :users do
     get 'friends', to: :friends
     mount FakeEngine::Engine, at: "/fake_engine", fake_default_param: 'FAKE'
+    post 'create_as_another_name', to: 'users#create'
   end
 end
