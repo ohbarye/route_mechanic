@@ -3,7 +3,7 @@ require "route_mechanic/testing/error_inspector"
 module RouteMechanic
   module Testing
     class ErrorAggregator
-      attr_reader :controller_routes_errors, :config_routes_errors
+      attr_reader :unused_actions_errors, :unused_routes_errors
 
       # @param [Array<ActionDispatch::Journey::Route>] routes
       # @param [Array<Controller>] controllers
@@ -12,31 +12,36 @@ module RouteMechanic
         @controllers = controllers
         @config_routes = []
         @controller_routes = []
-        @config_routes_errors = []
-        @controller_routes_errors = []
+        @unused_routes_errors = []
+        @unused_actions_errors = []
       end
 
-      def aggregate
-        collect_controller_routes_errors
-        collect_config_routes_errors
+      # @param [Boolean] unused_actions
+      # @param [Boolean] unused_routes
+      def aggregate(unused_actions: true, unused_routes: true)
+        collect_unused_actions_errors(unused_actions)
+        collect_unused_routes_errors(unused_routes)
         self
       end
 
+      # @return [Array<ActionDispatch::Journey::Route>]
       def all_routes
         @config_routes + @controller_routes
       end
 
+      # @return [Boolean]
       def no_error?
-        [@config_routes_errors, @controller_routes_errors].all?(&:empty?)
+        [@unused_routes_errors, @unused_actions_errors].all?(&:empty?)
       end
 
+      # @return [String]
       def error_message
         ErrorInspector.new(self).message
       end
 
       private
 
-      def collect_controller_routes_errors
+      def collect_unused_actions_errors(report_error)
         @controllers.each do |controller|
           controller_path = controller.controller_path
           controller.action_methods.each do |action_method|
@@ -45,7 +50,7 @@ module RouteMechanic
             end
 
             if journey_routes.empty?
-              @controller_routes_errors << { controller: controller, action: action_method }
+              @unused_actions_errors << { controller: controller, action: action_method } if report_error
             else
               wrappers = journey_routes.map { |r| RouteWrapper.new(r) }
               @controller_routes.concat(wrappers)
@@ -54,7 +59,7 @@ module RouteMechanic
         end
       end
 
-      def collect_config_routes_errors
+      def collect_unused_routes_errors(report_error)
         @routes.each do |journey_route|
           wrapper = RouteWrapper.new journey_route
           @config_routes << wrapper
@@ -63,7 +68,7 @@ module RouteMechanic
             wrapper.controller == w.controller && wrapper.action == w.action && wrapper.path == w.path
           end
 
-          @config_routes_errors << wrapper unless matched_controller_exist
+          @unused_routes_errors << wrapper if !matched_controller_exist && report_error
         end
       end
     end
