@@ -2,7 +2,7 @@
 [![Gem Version](https://badge.fury.io/rb/route_mechanic.svg)](https://badge.fury.io/rb/route_mechanic)
 [![Build Status](https://github.com/ohbarye/route_mechanic/workflows/test/badge.svg?branch=master)](https://github.com/ohbarye/route_mechanic/actions?query=workflow%3Atest)
 
-No need to maintain Rails' routing tests manually. RouteMechanic automatically detects broken routes and missing action methods in controller once you've finished installation.
+No need to maintain Rails' routing tests manually. RouteMechanic automatically detects broken routes and missing action methods in controllers once you've finished installation.
 
 ## Installation
 
@@ -28,7 +28,7 @@ All you have to do is to add just one test case that keeps your application's ro
 
 ### RSpec
 
-Just add a test file which has only one test case using `have_valid_routes` matcher.
+Just add one test file that has only one test case using `have_valid_routes` matcher.
 
 ```ruby
 RSpec.describe 'Rails.application', type: :routing do
@@ -40,7 +40,7 @@ end
 
 ### MiniTest
 
-Just add a test file like below.
+Just add one test file like below.
 
 ```ruby
 class RoutingTest < Minitest::Test
@@ -75,20 +75,20 @@ It tells you broken routes as follows.
 RouteMechanic reports 2 types of broken routes.
 
 1. Missing routes
-    - Your application has the controller and the action method but `config/routes.rb` doesn't have corresponds settings.
+    - Your application has the controller and the action method but `config/routes.rb` doesn't have corresponding settings.
 2. Missing action methods
-    - Your application's `config/routes.rb` has routing declaration but no controller has a correspond action method.
+    - Your application's `config/routes.rb` has a routing declaration but no controller has a corresponding action method.
 
 ## Motivation
 
-I believe most Rails developers write request specs instead of routing specs, and you might wonder what's worth to automate routing spec. Having said that, I can come up with some use-cases of this gem.
+I believe most Rails developers write request specs instead of routing specs, and you might wonder what's worth to automate routing specs. Having said that, I can come up with some use-cases of this gem.
 
 1. When your project is kinda aged and none knows which route is alive and which one is dead.
     - => You can detect dead code by using this gem.
 2. When your application doesn't have enough request specs (even controller specs).
     - => This gem could be a good start point to increase tests to ensure routing is valid.
-3. When you try to make big refactor of `config/routes.rb`.
-    - => It's burden to run all request specs during refactoring. This could save your time.
+3. When you try to make a big refactor of `config/routes.rb`.
+    - => It's a burden to run all request specs during refactoring. This could save your time.
 4. When you're compelled to write routing specs by any pressure. ;-)
     - => Set you free from tedious work!
 
@@ -99,4 +99,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the RouteMechanic project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/route_mechanic/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the RouteMechanic project's codebases, issue trackers, chat rooms, and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/route_mechanic/blob/master/CODE_OF_CONDUCT.md).
