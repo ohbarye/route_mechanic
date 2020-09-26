@@ -1,15 +1,13 @@
 require 'fake_app/rails_app'
 
-RSpec.describe RouteMechanic::RSpec::Matchers, type: :routing do
+RSpec.describe RouteMechanic::RSpec::Matchers::HaveNoUnusedRoutes, type: :routing do
   include RouteMechanic::RSpec::Matchers
 
-  it "fails if application does not have valid routes" do
+  it "fails if application has unused routes" do
     expect {
-      expect(Rails.application).to have_valid_routes
+      expect(Rails.application).to have_no_unused_routes
     }.to raise_error(<<~MSG)
         [Route Mechanic]
-          No route matches to the controllers and action methods below
-            UsersController#unknown
           No controller and action matches to the routes below
             GET    /constraints_test(.:format)       users#index
             GET    /:locale/locale_test(.:format)    photos#index {:locale=>/en|ja/}
@@ -21,11 +19,10 @@ RSpec.describe RouteMechanic::RSpec::Matchers, type: :routing do
             GET    /users/:id/edit(.:format)         users#edit
             GET    /users/:id(.:format)              users#show
             DELETE /users/:id(.:format)              users#destroy
-
     MSG
   end
 
   it "provides a description" do
-    expect(have_valid_routes.description).to eq "have valid routes"
+    expect(have_no_unused_routes.description).to eq "have no unused routes"
   end
 end

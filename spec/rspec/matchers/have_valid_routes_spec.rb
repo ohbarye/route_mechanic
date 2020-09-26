@@ -1,13 +1,12 @@
 require 'fake_app/rails_app'
 
-RSpec.describe RouteMechanic::Testing::Methods do
-  include RouteMechanic::Testing::Methods
+RSpec.describe RouteMechanic::RSpec::Matchers::HaveValidRoutes, type: :routing do
+  include RouteMechanic::RSpec::Matchers
 
-  it "detects missing routes and missing action methods" do
-    begin
-      assert_all_routes
-    rescue Minitest::Assertion => e
-      expect(e.message).to eq <<~MSG
+  it "fails if application does not have valid routes" do
+    expect {
+      expect(Rails.application).to have_valid_routes
+    }.to raise_error(<<~MSG)
         [Route Mechanic]
           No route matches to the controllers and action methods below
             UsersController#unknown
@@ -22,19 +21,10 @@ RSpec.describe RouteMechanic::Testing::Methods do
             GET    /users/:id/edit(.:format)         users#edit
             GET    /users/:id(.:format)              users#show
             DELETE /users/:id(.:format)              users#destroy
-
-      MSG
-    end
+    MSG
   end
 
-  it "passes when missing routes and missing action methods don't exist" do
-    with_routing do |set|
-      set.draw do
-        resources :users, only: %i[create update] do
-          get :unknown
-        end
-      end
-      expect { assert_all_routes }.not_to raise_error
-    end
+  it "provides a description" do
+    expect(have_valid_routes.description).to eq "have valid routes"
   end
 end

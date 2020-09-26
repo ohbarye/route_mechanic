@@ -14,19 +14,40 @@ module RouteMechanic
       # @param [Rails::Application] application
       # @raise [Minitest::Assertion]
       def assert_all_routes(application=Rails.application)
+        assert_targets(application, unused_actions: true, unused_routes: true)
+      end
+
+      # @param [Rails::Application] application
+      # @raise [Minitest::Assertion]
+      def assert_no_unused_actions(application=Rails.application)
+        assert_targets(application, unused_actions: true, unused_routes: false)
+      end
+
+      # @param [Rails::Application] application
+      # @raise [Minitest::Assertion]
+      def assert_no_unused_routes(application=Rails.application)
+        assert_targets(application, unused_actions: false, unused_routes: true)
+      end
+
+      private
+
+      # @param [Rails::Application] application
+      # @param [Boolean] unused_actions
+      # @param [Boolean] unused_routes
+      # @raise [Minitest::Assertion]
+      def assert_targets(application, unused_actions:, unused_routes:)
         @application = application
 
         # Instead of including ActionController::TestCase::Behavior, set up
         # https://github.com/rails/rails/blob/5b6aa8c20a3abfd6274c83f196abf73cacb3400b/actionpack/lib/action_controller/test_case.rb#L519-L520
         @controller = nil unless defined? @controller
 
-        aggregator = ErrorAggregator.new(target_routes, controllers).aggregate
+        aggregator = ErrorAggregator.new(target_routes, controllers).aggregate(
+          unused_actions: unused_actions, unused_routes: unused_routes)
         aggregator.all_routes.each { |wrapper| assert_routes(wrapper) }
 
         assert(aggregator.no_error?, ->{ aggregator.error_message })
       end
-
-      private
 
       def routes
         # assert_routing expect @routes to exists as like this class inherits ActionController::TestCase.
