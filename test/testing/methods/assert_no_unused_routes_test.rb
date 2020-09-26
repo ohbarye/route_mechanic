@@ -1,7 +1,7 @@
 require "test_helper"
 require 'fake_app/rails_app'
 
-class AssertAllRoutesTest < Minitest::Test
+class AssertNoUnusedRoutesTest < Minitest::Test
   include RouteMechanic::Testing::Methods
 
   def test_that_fake_app_has_correct_routes
@@ -11,7 +11,7 @@ class AssertAllRoutesTest < Minitest::Test
           get :unknown
         end
       end
-      assert_all_routes
+      assert_no_unused_routes
     end
   end
 
@@ -21,14 +21,12 @@ class AssertAllRoutesTest < Minitest::Test
         set.draw do
           resources :users
         end
-        assert_all_routes
+        assert_no_unused_routes
       end
     end
 
     expected_message = <<~MSG
       [Route Mechanic]
-        No route matches to the controllers and action methods below
-          UsersController#unknown
         No controller and action matches to the routes below
           GET    /users(.:format)          users#index
           GET    /users/new(.:format)      users#new
@@ -43,13 +41,11 @@ class AssertAllRoutesTest < Minitest::Test
 
   def test_that_fake_app_has_missing_routes
     e = assert_raises(Minitest::Assertion) do
-      assert_all_routes
+      assert_no_unused_routes
     end
 
     expected_message = <<~MSG
       [Route Mechanic]
-        No route matches to the controllers and action methods below
-          UsersController#unknown
         No controller and action matches to the routes below
           GET    /constraints_test(.:format)       users#index
           GET    /:locale/locale_test(.:format)    photos#index {:locale=>/en|ja/}
