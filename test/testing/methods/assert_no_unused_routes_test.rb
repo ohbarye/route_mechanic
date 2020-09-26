@@ -33,7 +33,6 @@ class AssertNoUnusedRoutesTest < Minitest::Test
           GET    /users/:id/edit(.:format) users#edit
           GET    /users/:id(.:format)      users#show
           DELETE /users/:id(.:format)      users#destroy
-
     MSG
 
     assert_equal expected_message, e.message
@@ -57,7 +56,6 @@ class AssertNoUnusedRoutesTest < Minitest::Test
           GET    /users/:id/edit(.:format)         users#edit
           GET    /users/:id(.:format)              users#show
           DELETE /users/:id(.:format)              users#destroy
-
     MSG
 
     assert_equal expected_message, e.message

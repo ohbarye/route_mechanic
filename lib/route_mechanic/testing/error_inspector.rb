@@ -24,10 +24,9 @@ module RouteMechanic
           verb_width, path_width = widths
           buffer << "  No controller and action matches to the routes below"
           buffer << unused_routes_errors.map { |w| "    #{w.verb.ljust(verb_width)} #{w.path.ljust(path_width)} #{w.reqs}" }
-          buffer << "\n"
         end
 
-        ["[Route Mechanic]", buffer].join("\n")
+        ["[Route Mechanic]", buffer].join("\n") + "\n"
       end
 
       private

@@ -6,7 +6,7 @@ RSpec.describe RouteMechanic::RSpec::Matchers::HaveNoUnusedActions, type: :routi
   it "fails if application has unused actions" do
     expect {
       expect(Rails.application).to have_no_unused_actions
-    }.to raise_error(<<~MSG.chomp)
+    }.to raise_error(<<~MSG)
         [Route Mechanic]
           No route matches to the controllers and action methods below
             UsersController#unknown

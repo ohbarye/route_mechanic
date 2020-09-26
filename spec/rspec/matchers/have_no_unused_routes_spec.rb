@@ -19,7 +19,6 @@ RSpec.describe RouteMechanic::RSpec::Matchers::HaveNoUnusedRoutes, type: :routin
             GET    /users/:id/edit(.:format)         users#edit
             GET    /users/:id(.:format)              users#show
             DELETE /users/:id(.:format)              users#destroy
-
     MSG
   end
 

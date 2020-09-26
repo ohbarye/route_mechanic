@@ -31,7 +31,7 @@ class AssertNoUnusedActionsTest < Minitest::Test
           UsersController#unknown
     MSG
 
-    assert_equal expected_message.chomp, e.message
+    assert_equal expected_message, e.message
   end
 
   def test_that_fake_app_has_missing_routes
@@ -45,6 +45,6 @@ class AssertNoUnusedActionsTest < Minitest::Test
           UsersController#unknown
     MSG
 
-    assert_equal expected_message.chomp, e.message
+    assert_equal expected_message, e.message
   end
 end

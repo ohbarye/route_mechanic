@@ -21,7 +21,6 @@ RSpec.describe RouteMechanic::RSpec::Matchers::HaveValidRoutes, type: :routing d
             GET    /users/:id/edit(.:format)         users#edit
             GET    /users/:id(.:format)              users#show
             DELETE /users/:id(.:format)              users#destroy
-
     MSG
   end
 
