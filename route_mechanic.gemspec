@@ -24,6 +24,6 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "actionpack", ">= 4.2", "< 6.1"
+  spec.add_runtime_dependency "actionpack", ">= 4.2", "< 6.2"
   spec.add_runtime_dependency "regexp-examples", ">= 1.5", "< 2"
 end
