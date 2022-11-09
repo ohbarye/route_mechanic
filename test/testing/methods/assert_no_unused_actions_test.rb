@@ -10,6 +10,8 @@ class AssertNoUnusedActionsTest < Minitest::Test
         resources :users, only: %i[create update] do
           get :unknown
         end
+
+        get 'computer_business', to: 'api#computer_business'
       end
       assert_no_unused_actions
     end
@@ -29,6 +31,7 @@ class AssertNoUnusedActionsTest < Minitest::Test
       [Route Mechanic]
         No route matches to the controllers and action methods below
           UsersController#unknown
+          ApiController#computer_business
     MSG
 
     assert_equal expected_message, e.message
