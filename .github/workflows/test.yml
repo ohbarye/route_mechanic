@@ -27,13 +27,19 @@ jobs:
           - ruby:2.7
           - ruby:3.0
           - rubylang/ruby:master-nightly-bionic
+        gemfile:
+          - rails-6.0
+          - rails-6.1
+          - rails-7.0
         test_framework:
           - rspec
           - rake
         include:
           - ruby: rubylang/ruby:master-nightly-bionic
             allow_failures: "true"
-
+    env:
+      BUNDLE_WITHOUT: 'development'
+      BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
       - uses: actions/checkout@v2
       - name: Cache vendor/bundle
