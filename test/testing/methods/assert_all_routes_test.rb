@@ -1,4 +1,4 @@
-require "test_helper"
+require 'test_helper'
 require 'fake_app/rails_app'
 
 class AssertAllRoutesTest < Minitest::Test
@@ -29,8 +29,8 @@ class AssertAllRoutesTest < Minitest::Test
     expected_message = <<~MSG
       [Route Mechanic]
         No route matches to the controllers and action methods below
-          UsersController#unknown
           ApiController#computer_business
+          UsersController#unknown
         No controller and action matches to the routes below
           GET    /users(.:format)          users#index
           GET    /users/new(.:format)      users#new

@@ -90,8 +90,9 @@ module RouteMechanic
 
       # @return [Array<Controller>]
       def controllers
-        eager_load_controllers
-        ApplicationController.descendants
+        eager_load_controllers.map { |controller|
+          controller.gsub(%r{.+app/controllers/}, '')[0..-4].classify.constantize
+        }
       end
 
       # In RAILS_ENV=test, eager load is false and `ApplicationController.descendants` might be empty.
@@ -99,7 +100,7 @@ module RouteMechanic
       # If complicated controllers path is used, use Rails.application.eager_load! instead.
       def eager_load_controllers
         load_path = "#{Rails.root.join('app/controllers')}"
-        Dir.glob("#{load_path}/**/*.rb").sort.each do |file|
+        Dir.glob("#{load_path}/**/*_controller.rb").sort.each do |file|
           require_dependency file
         end
       end
