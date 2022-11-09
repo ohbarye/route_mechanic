@@ -13,20 +13,20 @@ module RouteMechanic
 
       # @param [Rails::Application] application
       # @raise [Minitest::Assertion]
-      def assert_all_routes(application=Rails.application)
-        assert_targets(application, unused_actions: true, unused_routes: true)
+      def assert_all_routes(application=Rails.application, extra_controllers: [], ignore_controllers: [])
+        assert_targets(application, unused_actions: true, unused_routes: true, extra_controllers: extra_controllers, ignore_controllers: ignore_controllers)
       end
 
       # @param [Rails::Application] application
       # @raise [Minitest::Assertion]
-      def assert_no_unused_actions(application=Rails.application)
-        assert_targets(application, unused_actions: true, unused_routes: false)
+      def assert_no_unused_actions(application=Rails.application, extra_controllers: [], ignore_controllers: [])
+        assert_targets(application, unused_actions: true, unused_routes: false, extra_controllers: extra_controllers, ignore_controllers: ignore_controllers)
       end
 
       # @param [Rails::Application] application
       # @raise [Minitest::Assertion]
-      def assert_no_unused_routes(application=Rails.application)
-        assert_targets(application, unused_actions: false, unused_routes: true)
+      def assert_no_unused_routes(application=Rails.application, extra_controllers: [], ignore_controllers: [])
+        assert_targets(application, unused_actions: false, unused_routes: true, extra_controllers: extra_controllers, ignore_controllers: ignore_controllers)
       end
 
       private
@@ -35,14 +35,14 @@ module RouteMechanic
       # @param [Boolean] unused_actions
       # @param [Boolean] unused_routes
       # @raise [Minitest::Assertion]
-      def assert_targets(application, unused_actions:, unused_routes:)
+      def assert_targets(application, unused_actions:, unused_routes:, extra_controllers: [], ignore_controllers: [])
         @application = application
 
         # Instead of including ActionController::TestCase::Behavior, set up
         # https://github.com/rails/rails/blob/5b6aa8c20a3abfd6274c83f196abf73cacb3400b/actionpack/lib/action_controller/test_case.rb#L519-L520
         @controller = nil unless defined? @controller
 
-        aggregator = ErrorAggregator.new(target_routes, controllers).aggregate(
+        aggregator = ErrorAggregator.new(target_routes, controllers + extra_controllers - ignore_controllers).aggregate(
           unused_actions: unused_actions, unused_routes: unused_routes)
         aggregator.all_routes.each { |wrapper| assert_routes(wrapper) }
 
