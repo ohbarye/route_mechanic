@@ -9,8 +9,10 @@ module RouteMechanic
         include RouteMechanic::Testing::Methods
 
         # @param [Rails::Application] expected
-        def initialize(expected)
+        def initialize(expected, extra_controllers: [], ignore_controllers: [])
           @expected = expected
+          @extra_controllers = extra_controllers
+          @ignore_controllers = ignore_controllers
         end
 
         def matches?(_actual)

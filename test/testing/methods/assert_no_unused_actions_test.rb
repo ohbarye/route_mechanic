@@ -1,4 +1,4 @@
-require "test_helper"
+require 'test_helper'
 require 'fake_app/rails_app'
 
 class AssertNoUnusedActionsTest < Minitest::Test
@@ -10,6 +10,8 @@ class AssertNoUnusedActionsTest < Minitest::Test
         resources :users, only: %i[create update] do
           get :unknown
         end
+
+        get 'computer_business', to: 'api#computer_business'
       end
       assert_no_unused_actions
     end
@@ -28,6 +30,7 @@ class AssertNoUnusedActionsTest < Minitest::Test
     expected_message = <<~MSG
       [Route Mechanic]
         No route matches to the controllers and action methods below
+          ApiController#computer_business
           UsersController#unknown
     MSG
 

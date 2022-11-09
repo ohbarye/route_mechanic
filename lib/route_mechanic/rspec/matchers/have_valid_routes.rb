@@ -8,7 +8,7 @@ module RouteMechanic
           # assert_recognizes does not consider ActionController::RoutingError an
           # assertion failure, so we have to capture that and Assertion here.
           match_unless_raises Minitest::Assertion, ActiveSupport::TestCase::Assertion, ActionController::RoutingError do
-            assert_all_routes(@expected)
+            assert_all_routes(@expected, extra_controllers: @extra_controllers, ignore_controllers: @ignore_controllers)
           end
         end
 
