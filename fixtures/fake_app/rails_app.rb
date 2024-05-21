@@ -21,6 +21,8 @@ FakeApp.routes.draw do
 
   get 'organizations/:id', to: 'organizations#show', id: /[A-Z]\d{5}/
 
+  get 'computer_business', to: 'api#computer_business'
+
   resources :users do
     get 'friends', to: :friends
     mount FakeEngine::Engine, at: "/fake_engine", fake_default_param: 'FAKE'
