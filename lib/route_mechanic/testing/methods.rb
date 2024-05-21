@@ -68,7 +68,7 @@ module RouteMechanic
       def assert_routes(wrapper)
         required_parts = wrapper.required_parts.reduce({}) do |memo, required_part|
           dummy = if wrapper.requirements[required_part].is_a?(Regexp)
-                    wrapper.requirements[required_part].examples.last
+                    wrapper.requirements[required_part].random_example
                   else
                     '1'
                   end
